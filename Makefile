@@ -31,14 +31,13 @@ migrate-create:
 		-seq "$(seq)"
 
 migrate-up:
-	docker compose run --rm todoapp-postgres-migrate \
-		-path /migrations \
-		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@todoapp-postgres:5432/${POSTGRES_DB}?sslmode=disable \
-		up
+	make migrate-action action=up
 
 migrate-down:
+	make migrate-action action=down
+
+migrate-action:
 	docker compose run --rm todoapp-postgres-migrate \
 		-path /migrations \
 		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@todoapp-postgres:5432/${POSTGRES_DB}?sslmode=disable \
-		down
-
+		"$(action)"
