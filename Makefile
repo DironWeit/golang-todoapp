@@ -21,7 +21,7 @@ env-cleanup:
 
 migrate-create:
 	@if [ -z "$(seq)" ]; then \
-		echo "Отсутствует параметр 'seq'. Пример: make migrate-action action=up"; \
+		echo "Отсутствует параметр 'seq'. Пример: make migrate-create seq=init"; \
 		exit 1; \
 	fi; \
 	docker compose run --rm todoapp-postgres-migrate \
@@ -38,7 +38,7 @@ migrate-down:
 
 migrate-action:
 	@if [ -z "$(action)" ]; then \
-			echo "Отсутствует параметр 'action'.="; \
+			echo "Отсутствует параметр 'action'. Пример: make migrate-action action=up"; \
 			exit 1; \
 		fi; \
 	docker compose run --rm todoapp-postgres-migrate \
