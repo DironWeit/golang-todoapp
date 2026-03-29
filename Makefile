@@ -18,3 +18,27 @@ env-cleanup:
 	else \
 		echo "Очистка окружения отменена"; \
 	fi
+
+migrate-create:
+	@if [ -z "$(seq)" ]; then \
+		echo "Отсутствует параметр 'seq'. Пример: make migrate-create seq=init"; \
+		exit 1; \
+	fi; \
+	docker compose run --rm todoapp-postgres-migrate \
+		create \
+		-ext sql \
+		-dir /migrations \
+		-seq "$(seq)"
+
+migrate-up:
+	docker compose run --rm todoapp-postgres-migrate \
+		-path /migrations \
+		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@todoapp-postgres:5432/${POSTGRES_DB}?sslmode=disable \
+		up
+
+migrate-down:
+	docker compose run --rm todoapp-postgres-migrate \
+		-path /migrations \
+		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@todoapp-postgres:5432/${POSTGRES_DB}?sslmode=disable \
+		down
+
